@@ -18,3 +18,6 @@ The **data** folder contains (i) all training and evaluation sets used to derive
 The **lib** folder contains the Python code to process the data and implement and test our machine learning models to reproduce our results.
 
 The **trained_models** folder contains ten EulerNet models trained independently on the different cross-validation splits.
+
+
+test
