@@ -30,3 +30,8 @@ Run main.py to get the following results. The model and the data will be downloa
 | Test misorientation mean | 8.243821916538268 |
 | TTA misorientation median | 3.9625569578252886 |
 | TTA misorientation mean | 6.704812606873361 |
+
+#### Training
+
+Run train.py to train the model with the default settings. 
+CUDA with GPU is recommended.

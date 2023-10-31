@@ -9,7 +9,6 @@ from utils import mkdir, save_data_to_file, device, get_random_samples, pp, ROOT
 from dataset import DRMDataset
 from datafold import DataFold
 from vocab import Vocab
-from aws import upload_file_to_s3, download_file_from_s3
 from models import DRMLSTM
 from test import test_loss, test_loss_greedy, TTA
 
@@ -39,7 +38,7 @@ def train(exp_name, model, vocab, num_epochs, batch_size,
   mkdir(EXP_PATH)  
   MODEL_PATH = os.path.join(EXP_PATH, "model_epoch_{}.th")
   save_data_to_file(config, EXP_PATH, "config.json")
-  upload_file_to_s3(os.path.join(EXP_PATH, "config.json"))
+  #upload_file_to_s3(os.path.join(EXP_PATH, "config.json"))
   dataset = DRMDataset(Xtrain, Ytrain, vocab, xwidth=xwidth)
   val_dataset = DRMDataset(Xval, Yval, vocab, xwidth=None)
   test_dataset = DRMDataset(Xtest, Ytest, vocab, xwidth=None)
@@ -130,11 +129,11 @@ def train(exp_name, model, vocab, num_epochs, batch_size,
 
       current_tta = mis.median().item()
       torch.save(model.state_dict(), MODEL_PATH.format(epoch))
-      upload_file_to_s3(MODEL_PATH.format(epoch))
+      #upload_file_to_s3(MODEL_PATH.format(epoch))
       if current_tta < best_tta:
         best_tta = current_tta            
         torch.save(model.state_dict(), MODEL_PATH.format("best"))
-        upload_file_to_s3(MODEL_PATH.format("best"))
+        #upload_file_to_s3(MODEL_PATH.format("best"))
       metric['best_tta'] = best_tta
       print("-------- TTA FINISHED -------------")            
       print()   
@@ -143,7 +142,7 @@ def train(exp_name, model, vocab, num_epochs, batch_size,
       pp.pprint(metric)
       metrics.append(metric)
       save_data_to_file(metrics, EXP_PATH, "metrics.json")
-      upload_file_to_s3(os.path.join(EXP_PATH, "metrics.json"))
+      #upload_file_to_s3(os.path.join(EXP_PATH, "metrics.json"))
       print("========================================")
       print("=================END====================")
       print() 
@@ -188,25 +187,8 @@ import sys
 
 
 if __name__ == "__main__":
-
-    #test_strs_to_quats()
-    #print(abc)
-    model_path = 'weighted_quatLSTM3_TTA35.th'
-    load_exp_name = 'TEST/TESTS/new_45epochs'
-    """
-    main1(sys.argv[1], 
-            num_epochs = 3 * 5, 
-            batch_size = 32 * 4 * 4 * 4,
-            load_model_path = None, 
-            load_exp_name = None, 
-            load_exp_step = "best", 
-            xwidth = None, 
-            factor = 2.0, 
-            lr = 0.001, 
-            dropout = 0.1)
-    """
     
-    main1(sys.argv[1], 
+    main1( "TEST", 
             num_epochs = 3 * 15, 
             batch_size = 32 * 4 * 4,
             load_model_path = None, 
@@ -217,32 +199,3 @@ if __name__ == "__main__":
             lr = 0.001, 
             dropout = 0.1)
     
-    
-    """
-    main1(sys.argv[1], 
-            num_epochs = 3 , 
-            batch_size = 32 * 4 * 4,
-            load_model_path = None, 
-            load_exp_name = load_exp_name, 
-            load_exp_step = "best", 
-            xwidth = 1, 
-            factor = 2.0, 
-            lr = 0.0, 
-            dropout = 0.1)
-    """
-    
-    #main1(60, aug=True, load_model_path="drm_quatLSTM_aug.th")
-
-    #"save_drm_quatLSTM.th"
-    #test1(model_path)
-    #test1_greedy(model_path)
-    #test2(model_path)
-    #test3()
-    #test4("drm_quatLSTM_aug.th")
-    #test5_batch(model_path)
-    #test6()
-    #test7()
-    #test8(model_path)
-
-    #test_pairwise()
-    #test_weighted_loss1(model_path)
