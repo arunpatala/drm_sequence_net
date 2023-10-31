@@ -3,13 +3,12 @@ import torch
 from tqdm import tqdm, trange
 
 from utils import device, mkdir, get_random_samples, ROOT_PATH, disp
-from aws import download_file_from_s3
+#from aws import download_file_from_s3
 from models import DRMLSTM
 from vocab import Vocab
 from datafold import DataFold
 from dataset import DRMDataset
 from quats import Quaternions
-from cluster import quat_clustering_max, quat_clustering
 
 
 def shift_euler(eulers, shift):
@@ -58,12 +57,12 @@ def get_center(Ypreds, Ytruth):
   min_degs = []
   all_mis_pairs = []
   minY = []
-  print("Y", Ytruth.shape, Ypreds.shape)
+  #print("Y", Ytruth.shape, Ypreds.shape)
   Ytruth = Ytruth.reshape(-1,3)
   for idx in trange(len(Ytruth)):
     minY.append(pairwise_mis(Ypreds[:, idx]))
   minY = torch.stack(minY)
-  print("Y", Ytruth.shape, Ypreds.shape, minY.shape)
+  #print("Y", Ytruth.shape, Ypreds.shape, minY.shape)
   QYtruth = Quaternions.from_eulersS0(Ytruth)
   min_degs = Quaternions.misorientations_symmetries(minY, QYtruth, degrees=True)
   return min_degs
@@ -80,7 +79,7 @@ class ModelWrapper:
       mkdir(EXP_PATH)  
       MODEL_PATH = (EXP_PATH +"/model_epoch_{}.th").format(load_exp_step)
       if not os.path.exists(MODEL_PATH):
-        download_file_from_s3(MODEL_PATH)
+        raise Exception( f"{MODEL_PATH} path doesnt exist")
       self.model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
       return self
     
@@ -105,12 +104,12 @@ class ModelWrapper:
         preds, truths = torch.cat(outputs), torch.cat(inputs) 
         
         min_degs = Quaternions.misorientations_symmetries(preds, truths, degrees=True)
-        print("average mis", min_degs.median(), min_degs.mean())
+        #print("average mis", min_degs.median(), min_degs.mean())
         preds = preds.reshape(72, -1, 4)
         truths = truths.reshape(72, -1, 4)
         shifted_preds, shifted_truths = tta(preds, truths)
         mis = get_center(shifted_preds, Y)
-        print("TTA mis", mis.median(), mis.mean())        
+        print("TTA misorientation", "median",  mis.median().item(), "mean", mis.mean().item())        
         return mis
         
     
@@ -198,7 +197,7 @@ from test import test_loss_greedy
 
 import matplotlib.pyplot as plt
 
-def save_histogram(values, file_name="histogram.png"):
+def save_histogram(values, file_name="histogram.png", max_y=200):
     """
     Generate a histogram from the given list of values and save it to a file.
 
@@ -208,10 +207,13 @@ def save_histogram(values, file_name="histogram.png"):
     """
     
     # Create the histogram
-    plt.hist(values, bins=20, edgecolor='black', alpha=0.7)
+    plt.hist(values, bins=40, edgecolor='black', alpha=0.7)
     plt.title("Histogram of Values")
     plt.xlabel("Value")
     plt.ylabel("Frequency")
+    if max_y is not None:
+        plt.ylim(0, max_y)
+
 
     # Save the plot to the specified file
     plt.savefig(file_name)
@@ -252,6 +254,7 @@ def compare_histograms(values1, values2, file_name="compare_histograms.png", bin
     plt.title("Comparison of Model misorientations")
     plt.xlabel("Misorientation")
     plt.ylabel("Frequency")
+
     plt.legend(loc='upper right')  # Display a legend to label the two histograms
 
     # Save the plot to the specified file
@@ -260,15 +263,15 @@ def compare_histograms(values1, values2, file_name="compare_histograms.png", bin
 
 def test1(load_exp_name='TEST/TESTS/new_45epochs', batch_size=16*4, conditional=1, tta=False):
    md = ModelWrapper(conditional=conditional).load_exp(load_exp_name)      
-   print(md.model)
+   #print(md.model)
 
    df = DataFold()
    Xtrain, Ytrain, Xval, Yval, Xtest, Ytest = df.load_fold_val()
    #Xtest, Ytest = Xtest[:50], Ytest[:50]
    #Xtest, Ytest = Xval, Yval
    mis = md.get_mis(Xtest, Ytest, batch_size, tta=tta)
-   print("test1 mis", mis.median(), mis.mean())
-   save_histogram(mis.cpu().tolist())
+   print("test misorientation", "median", mis.median().item(), "mean", mis.mean().item())
+   save_histogram(mis.cpu().tolist(), "histogram_tta.png" if tta else "histogram.png")
    return mis
 
 def test1_compare(load_exp_name='TEST/TESTS/new_45epochs', batch_size=16*4, conditional=1, tta=False):
@@ -413,13 +416,21 @@ def test5(load_exp_name='TEST/TESTS/new_45epochs', batch_size=16):
    print(Xtest.shape[0]*Xtest.shape[1])
    print(Xtrain.shape[0]*72)
    
-
+def test_best():
+    print("===============TESTING WITH TRAINED MODEL=============")
+    test1("BEST")
+    print("===============TTA=============")
+    test1("BEST", tta=True)
 
 
 if __name__ == "__main__":
+    print("===============TESTING WITH TRAINED MODEL=============")
+    test1("BEST")
+    print("===============TTA=============")
+    test1("BEST", tta=True)
+
+    """
     test1_compare(tta=False)
-    #plot_hist()
-    print(abc)
     #main1("test")
     load_exp_name1 = 'SYMS/LSTM'
     #test1(load_exp_name)
@@ -432,3 +443,4 @@ if __name__ == "__main__":
     #test_beams(load_exp_name)
 
     test11(load_exp_name1, load_exp_name2)
+    """

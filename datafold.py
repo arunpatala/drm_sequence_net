@@ -3,7 +3,7 @@ import numpy as np
 from utils import normalize_images
 
 class DataFold:
-    def __init__(self, root='data', train_set='training_sets', eval_set='evaluation_sets'):
+    def __init__(self, root='DATA/data', train_set='training_sets', eval_set='evaluation_sets'):
         self.root = root
         self.train_set = train_set
         self.eval_set = eval_set

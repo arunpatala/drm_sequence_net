@@ -11,7 +11,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 pp = pprint.PrettyPrinter(indent=4)
 
 
-ROOT_PATH = 'DRM/SAVE/EXPS/'
+ROOT_PATH = 'DATA/EXPS/'
 
 
 def shift_euler(eulers, shift):

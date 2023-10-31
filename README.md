@@ -20,4 +20,13 @@ The **lib** folder contains the Python code to process the data and implement an
 The **trained_models** folder contains ten EulerNet models trained independently on the different cross-validation splits.
 
 
-test
+#### Test
+
+Run main.py to get the following results. The model and the data will be downloaded automatically.
+
+| Metric | Value |
+|--------|-------|
+| Test misorientation median | 4.746987032061104 |
+| Test misorientation mean | 8.243821916538268 |
+| TTA misorientation median | 3.9625569578252886 |
+| TTA misorientation mean | 6.704812606873361 |
