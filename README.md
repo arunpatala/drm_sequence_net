@@ -6,7 +6,7 @@ Most of the code is inspired by [this repository](https://github.com/MalloryWitt
 
 #### Test
 
-Run `main.py` to obtain the following results. The model and the data will be downloaded automatically.
+Run `main.py` to obtain the following results of the SequenceNet. Test Time augmentation results are also noted below. The model and the data will be downloaded automatically.
 
 | Metric | Value |
 |--------|-------|
