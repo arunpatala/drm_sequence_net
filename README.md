@@ -4,11 +4,28 @@ This code is for the paper Autoregressive Models for Crystallographic Orientatio
 
 Most of the code is inspired from https://github.com/MalloryWittwer/drm_ml_demo
 
+#### Test
+
+Run main.py to get the following results. The model and the data will be downloaded automatically.
+
+| Metric | Value |
+|--------|-------|
+| Test misorientation median | 4.74 |
+| Test misorientation mean | 8.24 |
+| TTA misorientation median | 3.96 |
+| TTA misorientation mean | 6.70 |
+
+#### Training
+
+Run train.py to train the model with the default settings. 
+CUDA with GPU is recommended.
 
 ##### Data
 Please download the **data** folder (3.5 GB) and **trained_models** folder (139 Mb) from the Menedley Dataset available at [DOI:10.17632/z8bh7n5b7d.1](https://data.mendeley.com/datasets/z8bh7n5b7d/1). Copy the two folders into the root directory of the repository.
 
-### Description
+Or run main.py to download the data
+
+#### Data Description
 
 The **data** folder contains (i) all training and evaluation sets used to derive the results presented in our publication and (ii) three additional files: 
 - **/samples/08/drm_data.npy** : A 4D numerical matrix (shape (x, y, theta, phi), type uint8) representing the experimental DRM dataset of the test specimen showcased in Figure 3 of the paper.
@@ -20,18 +37,3 @@ The **lib** folder contains the Python code to process the data and implement an
 The **trained_models** folder contains ten EulerNet models trained independently on the different cross-validation splits.
 
 
-#### Test
-
-Run main.py to get the following results. The model and the data will be downloaded automatically.
-
-| Metric | Value |
-|--------|-------|
-| Test misorientation median | 4.746987032061104 |
-| Test misorientation mean | 8.243821916538268 |
-| TTA misorientation median | 3.9625569578252886 |
-| TTA misorientation mean | 6.704812606873361 |
-
-#### Training
-
-Run train.py to train the model with the default settings. 
-CUDA with GPU is recommended.
