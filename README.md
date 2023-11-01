@@ -30,13 +30,11 @@ Or run `main.py` to download the data.
 
 The **data** folder contains:
 
-(i) All training and evaluation sets used to derive the results presented in our publication. 
+(i) All training and evaluation sets used to derive the results. 
 
 (ii) Three additional files: 
 - **/samples/08/drm_data.npy**: A 4D numerical matrix (shape (x, y, theta, phi), type uint8) representing the experimental DRM dataset of the test specimen showcased in Figure 3 of the paper.
 - **/samples/08/eulers.npy**: The corresponding matrix of Euler angles measured by EBSD for this test specimen (shape (x, y, 3), type float32).
 - **anomaly_specimen.npy**: The DRM dataset of the specimen shown in Figure 6 of the paper to demonstrate the detection of out-of-distribution data.
 
-The **lib** folder contains the Python code to process the data, and to implement and test our machine learning models to reproduce our results.
 
-The **trained_models** folder contains ten EulerNet models trained independently on different cross-validation splits.
