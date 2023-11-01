@@ -2,7 +2,7 @@
 
 This code is for the paper "Autoregressive Models for Crystallographic Orientation Prediction in the Presence of Symmetries."
 
-Most of the code is inspired by [this repository](https://github.com/MalloryWittwer/drm_ml_demo).
+Most of the code is inspired by [this repository](https://github.com/MalloryWittwer/drm_ml_demo). The EulerNet results can be viewed there.
 
 #### Test
 
@@ -17,12 +17,12 @@ Run `main.py` to obtain the following results. The model and the data will be do
 
 #### Training
 
-Run `train.py` to train the model with the default settings. 
+Run `train.py` to train the sequence net model with the default settings. 
 Using CUDA with a GPU is recommended.
 
 ##### Data
 
-Please download the **data** folder (3.5 GB) and the **trained_models** folder (139 MB) from the Mendeley Dataset available at [DOI:10.17632/z8bh7n5b7d.1](https://data.mendeley.com/datasets/z8bh7n5b7d/1). Copy the two folders into the root directory of the repository.
+Please download the **data** folder (3.5 GB) from the Mendeley Dataset available at [DOI:10.17632/z8bh7n5b7d.1](https://data.mendeley.com/datasets/z8bh7n5b7d/1). Copy the data folder into the root directory of the repository.
 
 Or run `main.py` to download the data.
 
