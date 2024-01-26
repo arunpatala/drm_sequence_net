@@ -2,6 +2,8 @@
 
 This code is for the paper "Autoregressive Models for Crystallographic Orientation Prediction in the Presence of Symmetries."
 
+Paper can be found [here](https://github.com/arunpatala/drm_sequence_net/blob/main/Predicting_Orientations_with_Symmetries.pdf)
+
 Most of the code is inspired by [this repository](https://github.com/MalloryWittwer/drm_ml_demo). The EulerNet results can be viewed there.
 
 #### Test
